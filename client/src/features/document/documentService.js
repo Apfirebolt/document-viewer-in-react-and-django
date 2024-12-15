@@ -11,7 +11,10 @@ const createDocument = async (documentData, token) => {
       },
     }
     const response = await httpClient.post('documents', documentData, config)
-    return response.data
+    if (response.status === 201) {
+      toast.success('Document uploaded successfully')
+      return response.data
+    }
   } catch (err) {
     let errorMessage = 'Something went wrong'
     if (err.response.status === 401) {

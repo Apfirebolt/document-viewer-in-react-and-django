@@ -9,7 +9,10 @@ const DocumentUpload = (props) => {
   } = useForm();
 
   const formSubmit = (data) => {
-    props.uploadDocumentUtil(data);
+    const formData = new FormData();
+    formData.append("file", data.file[0]);  
+    formData.append("description", data.description);
+    props.uploadDocumentUtil(formData);
   };
 
   return (

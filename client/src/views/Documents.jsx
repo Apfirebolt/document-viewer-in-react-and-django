@@ -1,36 +1,77 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import DocumentUpload from '../components/DocumentUpload';
-import { createDocument } from '../features/document/documentSlice';
+import DocumentUpload from "../components/DocumentUpload";
+import {
+  createDocument,
+  getDocuments,
+} from "../features/document/documentSlice";
 
 const Documents = () => {
   const { user } = useSelector((state) => state.auth);
+  const { documents } = useSelector((state) => state.document);
   const dispatch = useDispatch();
-  let [isModalOpened, setIsModalOpened] = useState(false)
+  let [isModalOpened, setIsModalOpened] = useState(false);
 
   function closeModal() {
-    setIsModalOpened(false)
+    setIsModalOpened(false);
   }
 
   function openModal() {
-    setIsModalOpened(true)
+    setIsModalOpened(true);
   }
 
   const uploadDocumentUtil = (data) => {
-    console.log("Data before submit here", data);
-    dispatch(createDocument(data));
-  }
+    dispatch(createDocument(data)).then(() => {
+      setIsModalOpened(false);
+    });
+  };
+
+  console.log(documents);
+
+  useEffect(() => {
+    dispatch(getDocuments());
+  }, [dispatch]);
 
   return (
     <div className="bg-white container mx-auto my-3">
       <section aria-labelledby="features-heading" className="relative">
         <div className="aspect-w-3 aspect-h-2 overflow-hidden sm:aspect-w-5 lg:aspect-none lg:absolute lg:w-1/2 lg:h-full lg:pr-4 xl:pr-16">
+          <p className="text-gray-500 text-lg text-center bg-neutral-100 p-4">
+            Documents
+          </p>
           <img
             src="/doc.jpg"
             alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
-            className="h-full w-full object-center object-cover lg:h-full lg:w-full"
+            className="object-center object-cover"
           />
+          {documents && documents.length > 0 ? (
+            <div className="mt-6 text-blue-500">
+              {documents.map((document) => (
+                <div key={document.id} className="text-gray-700 flex justify-between">
+                  <p>
+                    {document.description}
+                  </p>
+                  <div>
+                    <button
+                      className="text-blue-500 hover:underline"
+                      onClick={() => console.log(`Viewing document ${document.id}`)}
+                    >
+                      View
+                    </button>
+                    <button
+                      className="text-red-500 hover:underline ml-2"
+                      onClick={() => console.log(`Deleting document ${document.id}`)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No documents available</p>
+          )}
         </div>
 
         <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:pb-32 sm:px-6 lg:max-w-7xl lg:pt-32 lg:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8">
@@ -84,7 +125,7 @@ const Documents = () => {
                   >
                     Upload Document
                   </Dialog.Title>
-                  
+
                   <DocumentUpload uploadDocumentUtil={uploadDocumentUtil} />
                   <div className="mt-4">
                     <button

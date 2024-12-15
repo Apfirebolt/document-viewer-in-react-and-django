@@ -55,16 +55,21 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ListCreateDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ('id', 'user', 'document', 'uploaded_at', 'description')
+        fields = ('id', 'user', 'file', 'uploaded_at', 'description')
         read_only_fields = ('id', 'user', 'created_at',)
         extra_kwargs = {
             'user': {'read_only': True}
         }
 
-    def validate_document(self, value):
+    def validate_file(self, value):
         max_size = 5 * 1024 * 1024  # 5 MB
         if value.size > max_size:
-            raise serializers.ValidationError("Document size should not exceed 5 MB.")
+            raise serializers.ValidationError("File size should not exceed 5 MB.")
+        # valid files types are only jpg, jpeg, png, pdf and txt
+        valid_extensions = ['jpg', 'jpeg', 'png', 'pdf', 'txt']
+        ext = value.name.split('.')[-1]
+        if ext not in valid_extensions:
+            raise serializers.ValidationError("File type not supported.")
         return value
     
     def create(self, validated_data):
