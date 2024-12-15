@@ -6,9 +6,9 @@
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-%2338B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-# Quiz App - WWTBAM (Who wants to become a Millionaire?)
+# Document Viewer App in Django and React
 
-This is a quiz app which is based on the popular game quiz show called who wants to become a Millionaire (WWTBAM). The back-end of the application is created using Python and Django. The front-end of the application is built using React, Javascript and Tailwind CSS framework.
+This is a document viewer app which supports multiple types of documents and has a user authentication system built with some security features and also include feature to share documents with other users.
 
 http://localhost:8000/api-docs/
 
@@ -112,9 +112,9 @@ export default defineConfig({
 
 - User Registration
 
-- Users can view quizes and attend those quizes and view scores.
+- Users can upload documents like txt, doc and images and share it with other users.
 
-- Admin Panel is available from where admin users can add questions and quizes which can be attended by normal users of the portal.
+- Admin Panel is available.
 
 - Security: The application implements authentication and authorization mechanisms to ensure secure access to user data and prevent unauthorized actions.
 
