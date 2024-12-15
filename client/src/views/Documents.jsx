@@ -12,8 +12,8 @@ const Home = () => {
       <section aria-labelledby="features-heading" className="relative">
         <div className="aspect-w-3 aspect-h-2 overflow-hidden sm:aspect-w-5 lg:aspect-none lg:absolute lg:w-1/2 lg:h-full lg:pr-4 xl:pr-16">
           <img
-            src='/doc.jpg'
-            alt="Document viewer"
+            src="https://tailwindui.com/img/ecommerce-images/confirmation-page-01-hero.jpg"
+            alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
             className="h-full w-full object-center object-cover lg:h-full lg:w-full"
           />
         </div>
@@ -23,10 +23,10 @@ const Home = () => {
             <h2 id="features-heading" className="font-medium text-gray-500">
               {user ? `Welcome, ${user.email}` : "Please Login"}
             </h2>
-            <p className="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight">Welcome to Document Viewer</p>
+            <p className="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight">Welcome to Documents Page</p>
           
             <p className="mt-4 text-gray-500">
-            Portal to upload and share documents
+            Documents page
             </p>
           </div>
         </div>
