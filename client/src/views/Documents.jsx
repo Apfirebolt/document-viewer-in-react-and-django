@@ -2,8 +2,10 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DocumentUpload from "../components/DocumentUpload";
+import ConfirmModal from "../components/ConfirmModal";
 import {
   createDocument,
+  deleteDocument,
   getDocuments,
 } from "../features/document/documentSlice";
 
@@ -12,6 +14,9 @@ const Documents = () => {
   const { documents } = useSelector((state) => state.document);
   const dispatch = useDispatch();
   let [isModalOpened, setIsModalOpened] = useState(false);
+  let [isConfirmModalOpened, setIsConfirmModalOpened] = useState(false);
+  let [selectedDocument, setSelectedDocument] = useState(null);
+  let [deleteMessage, setDeleteMessage] = useState("");
 
   function closeModal() {
     setIsModalOpened(false);
@@ -21,13 +26,33 @@ const Documents = () => {
     setIsModalOpened(true);
   }
 
+  function closeConfirmModal() {
+    setIsConfirmModalOpened(false);
+  }
+
+  function openConfirmModal() {
+    setIsConfirmModalOpened(true);
+  }
+
   const uploadDocumentUtil = (data) => {
     dispatch(createDocument(data)).then(() => {
       setIsModalOpened(false);
+      dispatch(getDocuments());
     });
   };
 
-  console.log(documents);
+  const deleteDocumentUtil = () => {
+    dispatch(deleteDocument(selectedDocument.id)).then(() => {
+      setIsConfirmModalOpened(false);
+      dispatch(getDocuments());
+    });
+  };
+
+  const openDeleteModal = (document) => {
+    setSelectedDocument(document);
+    setDeleteMessage(`Are you sure you want to delete ${document.description}`);
+    openConfirmModal();
+  };
 
   useEffect(() => {
     dispatch(getDocuments());
@@ -35,8 +60,8 @@ const Documents = () => {
 
   return (
     <div className="bg-white container mx-auto my-3">
-      <section aria-labelledby="features-heading" className="relative">
-        <div className="aspect-w-3 aspect-h-2 overflow-hidden sm:aspect-w-5 lg:aspect-none lg:absolute lg:w-1/2 lg:h-full lg:pr-4 xl:pr-16">
+      <section aria-labelledby="features-heading" className="flex justify-around">
+        <div className="lg:w-1/2 lg:h-full lg:pr-4 xl:pr-16">
           <p className="text-gray-500 text-lg text-center bg-neutral-100 p-4">
             Documents
           </p>
@@ -52,16 +77,16 @@ const Documents = () => {
                   <p>
                     {document.description}
                   </p>
-                  <div>
+                  <div className="my-2">
                     <button
-                      className="text-blue-500 hover:underline"
+                      className="text-blue-500 bg-slate-100 hover:bg-slate-400 hover:text-white rounded-md shadow-md px-2 py-1 ml-2"
                       onClick={() => console.log(`Viewing document ${document.id}`)}
                     >
                       View
                     </button>
                     <button
-                      className="text-red-500 hover:underline ml-2"
-                      onClick={() => console.log(`Deleting document ${document.id}`)}
+                      className="text-red-500 bg-slate-100 hover:bg-slate-400 hover:text-white rounded-md shadow-md px-2 py-1 ml-2"
+                      onClick={() => openDeleteModal(document)}
                     >
                       Delete
                     </button>
@@ -74,8 +99,8 @@ const Documents = () => {
           )}
         </div>
 
-        <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:pb-32 sm:px-6 lg:max-w-7xl lg:pt-32 lg:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8">
-          <div className="lg:col-start-2">
+        <div className="lg:w-1/2 mx-auto pt-16 pb-24 px-4 sm:pb-32 sm:px-6 lg:max-w-7xl lg:pt-32 lg:px-8 lg:grid lg:gap-x-8">
+          <div>
             <h2 id="features-heading" className="font-medium text-gray-500">
               {user ? `Welcome, ${user.email}` : "Please Login"}
             </h2>
@@ -142,6 +167,12 @@ const Documents = () => {
           </div>
         </Dialog>
       </Transition>
+      <ConfirmModal 
+        isOpen={isConfirmModalOpened} 
+        message={deleteMessage} 
+        closeModal={closeConfirmModal} 
+        confirmAction={() => deleteDocumentUtil()}
+      />
     </div>
   );
 };

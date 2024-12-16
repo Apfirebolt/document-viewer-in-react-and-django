@@ -105,8 +105,9 @@ const deleteDocument = async (documentId, token) => {
     }
   
     const response = await httpClient.delete('documents/' + documentId, config)
-  
-    return response.data
+    if (response.status === 204) {
+      toast.success('Document deleted successfully')
+    }
   } catch (err) {
     let errorMessage = 'Something went wrong'
     if (err.response.status === 401) {

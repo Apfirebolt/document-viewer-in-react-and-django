@@ -140,7 +140,6 @@ export const documentSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getDocuments.fulfilled, (state, action) => {
-        console.log('Documents', action.payload)
         state.isLoading = false;
         state.documents = action.payload;
       })

@@ -58,6 +58,8 @@ class RetrieveUpdateDestroyDocumentApiView(RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         try:
             document = Document.objects.get(id=kwargs['pk'])
+            # also delete the file from the storage
+            document.file.delete()
             document.delete()
             return Response({'message': 'Document deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
         except Document.DoesNotExist:
