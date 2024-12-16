@@ -52,12 +52,12 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 })
 
 // Get User Profile
-export const getUserProfile = createAsyncThunk(
+export const updateUserProfile = createAsyncThunk(
   "auth/profile",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.access_token;
-      return await authService.getUserProfile(token);
+      return await authService.updateProfile(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -112,19 +112,19 @@ export const authSlice = createSlice({
         state.message = action.payload
         state.user = null
       })
-      .addCase(getUserProfile.pending, (state) => {
+      .addCase(updateUserProfile.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(getUserProfile.fulfilled, (state, action) => {
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.profile = action.payload
+        state.user = action.payload
       })
-      .addCase(getUserProfile.rejected, (state, action) => {
+      .addCase(updateUserProfile.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.profile = null
+        state.user = null
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null

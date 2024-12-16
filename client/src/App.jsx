@@ -8,6 +8,7 @@ import Home from "./views/Home";
 import Admin from "./views/admin/Home";
 import Login from "./views/auth/Login";
 import Register from "./views/auth/Register";
+import Profile from "./views/auth/Profile";
 import Documents from "./views/Documents";
 import Users from "./views/Users";
 
@@ -27,6 +28,9 @@ const App = () => {
         </Route>
         <Route path="/documents" element={<PrivateRoute />}>
           <Route path="/documents" element={<Documents />} />
+        </Route>
+        <Route path="/profile" element={<PrivateRoute />}>
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
       <Footer />
