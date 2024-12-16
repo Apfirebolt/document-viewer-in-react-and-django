@@ -8,12 +8,8 @@ import Home from "./views/Home";
 import Admin from "./views/admin/Home";
 import Login from "./views/auth/Login";
 import Register from "./views/auth/Register";
-import Question from "./views/admin/Question";
-import Quiz from "./views/Quiz";
-import TakeQuiz from "./views/TakeQuiz";
-import MyResults from "./views/MyResults";
-import AdminQuiz from "./views/admin/Quiz";
-import AdminQuizTaker from "./views/admin/QuizTaker";
+import Documents from "./views/Documents";
+import Users from "./views/Users";
 
 
 const App = () => {
@@ -24,21 +20,13 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/users" element={<Users />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin" element={<AdminRoute />}>
           <Route path="/admin" element={<Admin />} />
-          <Route exact path="/admin/quiz" element={<AdminQuiz />} />
-          <Route exact path="/admin/question" element={<Question />} />
-          <Route exact path="/admin/quiz-taker" element={<AdminQuizTaker />} />
         </Route>
-        <Route path="/quiz" element={<PrivateRoute />}>
-          <Route path="/quiz" element={<Quiz />} />
-        </Route>
-        <Route path="/take-quiz/:id" element={<PrivateRoute />}>
-          <Route path="/take-quiz/:id" element={<TakeQuiz />} />
-        </Route>
-        <Route path="/my-results" element={<PrivateRoute />}>
-          <Route path="/my-results" element={<MyResults />} />
+        <Route path="/documents" element={<PrivateRoute />}>
+          <Route path="/documents" element={<Documents />} />
         </Route>
       </Routes>
       <Footer />

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
+from documents.models import Document
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -49,3 +50,29 @@ class CustomUserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+    
+
+class ListCreateDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ('id', 'user', 'file', 'uploaded_at', 'description')
+        read_only_fields = ('id', 'user', 'created_at',)
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
+
+    def validate_file(self, value):
+        max_size = 5 * 1024 * 1024  # 5 MB
+        if value.size > max_size:
+            raise serializers.ValidationError("File size should not exceed 5 MB.")
+        # valid files types are only jpg, jpeg, png, pdf and txt
+        valid_extensions = ['jpg', 'jpeg', 'png', 'pdf', 'txt']
+        ext = value.name.split('.')[-1]
+        if ext not in valid_extensions:
+            raise serializers.ValidationError("File type not supported.")
+        return value
+    
+    def create(self, validated_data):
+        user = self.context['request'].user
+        document = Document.objects.create(user=user, **validated_data)
+        return document

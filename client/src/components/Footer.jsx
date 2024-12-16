@@ -19,15 +19,6 @@ const Footer = () => {
               />
             </div>
 
-            {/* Sitemap sections */}
-            <div className="mt-6 grid gap-8 md:mt-0 md:row-start-1 md:col-start-3 md:col-span-8 lg:col-start-2 lg:col-span-6">
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">
-                  Document Viewer
-                </h3>
-              </div>
-            </div>
-
             {/* Newsletter section */}
             <div className="mt-12 md:mt-0 md:row-start-2 md:col-start-3 md:col-span-8 lg:row-start-1 lg:col-start-9 lg:col-span-4">
               <h3 className="text-sm font-medium text-gray-900">
