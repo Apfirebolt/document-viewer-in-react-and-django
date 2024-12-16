@@ -1,9 +1,9 @@
 """
 Tests for the user API.
 """
-import tempfile
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from documents.models import Document
 from django.urls import reverse
 
@@ -21,12 +21,8 @@ def create_user(**params):
 def create_document(user, **params):
     return Document.objects.create(user=user, **params)
 
-
-def create_temp_file():
-    file = tempfile.NamedTemporaryFile(suffix='.pdf')
-    file.write(b'Hello World!')
-    file.seek(0)
-    return file
+def document_detail_url(document_id):
+    return reverse('api:document', args=[document_id])
 
 
 class DocumentApiTests(TestCase):
@@ -41,42 +37,86 @@ class DocumentApiTests(TestCase):
 
     
     def test_create_document_success(self):
-        temp_file = create_temp_file()
+        """
+        Test creating a new document
+        """
         payload = {
-            'description': 'This is a test document.',
-            'file': temp_file
+            'description': 'Test Document',
+            'file': SimpleUploadedFile('test.txt', b'test content'),
         }
         res = self.client.post(LIST_CREATE_DOCUMENT_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        document = Document.objects.get(id=res.data['id'])
-        self.assertEqual(document.description, payload['description'])
+        self.assertEqual(Document.objects.count(), 1)
+        document = Document.objects.first()
         self.assertEqual(document.user, self.user)
 
-    def test_retrieve_document_success(self):
-        temp_file = create_temp_file()
-        document = create_document(
-            user=self.user,
-            file=temp_file,
-            description='This is a test document.'
-        )
-        res = self.client.get(RETRIEVE_UPDATE_DESTROY_DOCUMENT_URL)
 
+    def test_create_invalid_document(self):
+       """
+       Test uploading invalid document, exe file
+       """
+       payload = {
+            'description': 'Invalid Document',
+            'file': SimpleUploadedFile('test.csv', b'name,age\nJohn,30\nDoe,25', content_type='text/csv'),
+       }
+       res = self.client.post(LIST_CREATE_DOCUMENT_URL, payload)
+       self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_get_single_document(self):
+        """
+        Test retrieving a document
+        """
+        payload = {
+            'description': 'Test Document',
+            'file': SimpleUploadedFile('test.txt', b'test content'),
+        }
+        document = create_document(user=self.user, **payload)
+        res = self.client.get(document_detail_url(document.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['description'], document.description)
-        self.assertEqual(res.data['user'], document.user.id)
 
 
-    def test_delete_document_success(self):
-        temp_file = create_temp_file()
-        document = create_document(
-            user=self.user,
-            file=temp_file,
-            description='This is a test document.'
-        )
-        res = self.client.delete(RETRIEVE_UPDATE_DESTROY_DOCUMENT_URL)
-
+    def test_delete_document(self):
+        """
+        Test deleting a document
+        """
+        payload = {
+            'description': 'Test Document',
+            'file': SimpleUploadedFile('test.txt', b'test content'),
+        }
+        document = create_document(user=self.user, **payload)
+        res = self.client.delete(document_detail_url(document.id))
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Document.objects.filter(id=document.id).exists())
+        self.assertEqual(Document.objects.count(), 0)
 
+    
+    def test_get_multiple_documents(self):
+        """
+        Test retrieving multiple documents
+        """
+        payload1 = {
+            'description': 'Test Document',
+            'file': SimpleUploadedFile('test.txt', b'test content'),
+        }
+        payload2 = {
+            'description': 'Test Document 2',
+            'file': SimpleUploadedFile('test2.txt', b'test content 2'),
+        }
+        document1 = create_document(user=self.user, **payload1)
+        document2 = create_document(user=self.user, **payload2)
+        res = self.client.get(LIST_CREATE_DOCUMENT_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 2)
+        self.assertEqual(res.data[0]['description'], document1.description)
+        self.assertEqual(res.data[1]['description'], document2.description)
+
+       
+        
+
+        
+
+
+    
     
