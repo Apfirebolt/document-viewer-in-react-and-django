@@ -3,6 +3,7 @@ from .views import (
     CreateCustomUserApiView,
     CustomTokenObtainPairView,
     ListCustomUsersApiView,
+    RetrieveUpdateDestroyCustomUserApiView,
     ListCreateDocumentApiView,
     RetrieveUpdateDestroyDocumentApiView,
 )
@@ -15,6 +16,11 @@ urlpatterns = [
     path("login", CustomTokenObtainPairView.as_view(), name="signin"),
     path("refresh", TokenRefreshView.as_view(), name="refresh"),
     path("users", ListCustomUsersApiView.as_view(), name="users"),
+    path(
+        "users/<int:pk>",
+        RetrieveUpdateDestroyCustomUserApiView.as_view(),
+        name="user",
+    ),
     path("documents", ListCreateDocumentApiView.as_view(), name="documents"),
     path(
         "documents/<int:pk>",

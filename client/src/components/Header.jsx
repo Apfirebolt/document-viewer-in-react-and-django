@@ -70,6 +70,15 @@ const Header = () => {
 
                   <div className="flow-root">
                     <Link
+                      to="/profile"
+                      className="-m-2 p-2 block font-medium text-gray-900"
+                    >
+                      Profile
+                    </Link>
+                  </div>
+
+                  <div className="flow-root">
+                    <Link
                       to="/documents"
                       className="-m-2 p-2 block font-medium text-gray-900"
                     >
@@ -149,6 +158,13 @@ const Header = () => {
                     </button>
 
                     <Link
+                      to="/profile"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
+                      Profile
+                    </Link>
+
+                    <Link
                       to="/documents"
                       className="text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
@@ -161,6 +177,7 @@ const Header = () => {
                     >
                       Users
                     </Link>
+
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
 
                     {user.is_admin ? (

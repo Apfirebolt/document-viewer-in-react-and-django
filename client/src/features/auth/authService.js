@@ -50,37 +50,34 @@ const logout = () => {
   localStorage.removeItem("user")
 };
 
-// Get user profile
-const getUserProfile = async (token) => {
+// update user profile details put request 'users/id'
+const updateProfile = async (userData, token) => {
   try {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-
-    const response = await httpClient.get("profile", config);
-    return response.data;
+    const response = await httpClient.put(`users/${userData.id}`, userData, config);
+    if (response.status === 200) {
+      toast.success("Profile updated successfully");
+      return response.data;
+    }
   } catch (err) {
     let errorMessage = "Something went wrong";
     if (err.response.status === 401) {
-      errorMessage = err.response.data.detail;
-      localStorage.removeItem("user")
-      // redirect to login
-      window.location.href = "/login";
-    }
-    if (err.response.status === 404) {
-      errorMessage = err.response.data.detail;
+      errorMessage = "Unauthorized access, please login again.";
+      logout();
     }
     toast.error(errorMessage);
   }
-};
+}
 
 const authService = {
   register,
   logout,
   login,
-  getUserProfile,
+  updateProfile
 };
 
 export default authService;

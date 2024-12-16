@@ -59,8 +59,19 @@ class ListUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'id', 'is_staff', 'is_superuser')
     
 
-class ListCreateDocumentSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
     
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'email', 'firstName', 'lastName')
+        read_only_fields = ('id',)
+        extra_kwargs = {
+            'username': {'read_only': True},
+            'email': {'read_only': True},
+        }
+
+class ListCreateDocumentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Document
         fields = ('id', 'user', 'file', 'uploaded_at', 'description')
