@@ -79,6 +79,15 @@ const Header = () => {
 
                   <div className="flow-root">
                     <Link
+                      to="/users"
+                      className="-m-2 p-2 block font-medium text-gray-900"
+                    >
+                      Users
+                    </Link>
+                  </div>
+
+                  <div className="flow-root">
+                    <Link
                       to="/admin"
                       className="-m-2 p-2 block font-medium text-gray-900"
                     >
@@ -144,6 +153,13 @@ const Header = () => {
                       className="text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       Documents
+                    </Link>
+
+                    <Link
+                      to="/users"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
+                      Users
                     </Link>
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
 
