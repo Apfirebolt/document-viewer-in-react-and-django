@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DocumentUpload from "../components/DocumentUpload";
+import ShowDocument from "../components/ShowDocument";
 import ConfirmModal from "../components/ConfirmModal";
 import {
   createDocument,
@@ -14,6 +15,7 @@ const Documents = () => {
   const { documents } = useSelector((state) => state.document);
   const dispatch = useDispatch();
   let [isModalOpened, setIsModalOpened] = useState(false);
+  let [showDocument, setShowDocument] = useState(false);
   let [isConfirmModalOpened, setIsConfirmModalOpened] = useState(false);
   let [selectedDocument, setSelectedDocument] = useState(null);
   let [deleteMessage, setDeleteMessage] = useState("");
@@ -32,6 +34,14 @@ const Documents = () => {
 
   function openConfirmModal() {
     setIsConfirmModalOpened(true);
+  }
+
+  function closeDocument() {
+    setShowDocument(false);
+  }
+
+  function openDocument() {
+    setShowDocument(true);
   }
 
   const uploadDocumentUtil = (data) => {
@@ -54,6 +64,11 @@ const Documents = () => {
     openConfirmModal();
   };
 
+  const viewDocument = (document) => {
+    setSelectedDocument(document);
+    openDocument();
+  }
+
   useEffect(() => {
     dispatch(getDocuments());
   }, [dispatch]);
@@ -70,6 +85,7 @@ const Documents = () => {
             alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
             className="object-center object-cover"
           />
+          
           {documents && documents.length > 0 ? (
             <div className="mt-6 text-blue-500">
               {documents.map((document) => (
@@ -80,7 +96,7 @@ const Documents = () => {
                   <div className="my-2">
                     <button
                       className="text-blue-500 bg-slate-100 hover:bg-slate-400 hover:text-white rounded-md shadow-md px-2 py-1 ml-2"
-                      onClick={() => console.log(`Viewing document ${document.id}`)}
+                      onClick={() => viewDocument(document)}
                     >
                       View
                     </button>
@@ -173,6 +189,13 @@ const Documents = () => {
         closeModal={closeConfirmModal} 
         confirmAction={() => deleteDocumentUtil()}
       />
+      {selectedDocument && (
+        <ShowDocument 
+          isOpen={showDocument} 
+          document={selectedDocument} 
+          closeModal={closeDocument}
+        />
+      )}
     </div>
   );
 };
