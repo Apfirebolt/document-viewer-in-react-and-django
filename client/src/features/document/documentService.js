@@ -23,7 +23,7 @@ const createDocument = async (documentData, token) => {
     }
     if (err.response.status === 400) {
       errorMessage = ''
-      err.response.data.non_field_errors.map((error) => {
+      err.response.data.file.map((error) => {
         errorMessage += error + '\n'
       })
     }

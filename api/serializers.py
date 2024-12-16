@@ -52,7 +52,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
     
 
+class ListUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'id', 'is_staff', 'is_superuser')
+    
+
 class ListCreateDocumentSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Document
         fields = ('id', 'user', 'file', 'uploaded_at', 'description')
