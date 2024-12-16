@@ -51,7 +51,6 @@ const logout = () => {
 };
 
 // update user profile details put request 'users/id'
-
 const updateProfile = async (userData, token) => {
   try {
     const config = {
@@ -69,9 +68,6 @@ const updateProfile = async (userData, token) => {
     if (err.response.status === 401) {
       errorMessage = "Unauthorized access, please login again.";
       logout();
-    }
-    if (err.response.status === 400) {
-      errorMessage = err.response.data.detail;
     }
     toast.error(errorMessage);
   }

@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { register as registerFunc, reset } from "../../features/auth/authSlice";
+import { updateUserProfile } from "../../features/auth/authSlice";
 
-const Register = () => {
+const Profile = () => {
 
   const { user, isError, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -17,10 +17,10 @@ const Register = () => {
     reset,
   } = useForm({
     defaultValues: {
-        email: user.email ? user.email : "",
-        username: user.username ? user.username : "",
-        firstName: user.firstName ? user.firstName : "",
-        lastName: user.lastName ? user.lastName : "",
+        email: user && user.email ? user.email : "",
+        username: user && user.username ? user.username : "",
+        firstName: user && user.firstName ? user.firstName : "",
+        lastName: user && user.lastName ? user.lastName : "",
     },
   });
 
@@ -32,6 +32,14 @@ const Register = () => {
       console.error(message);
     }
   }, [isError, isSuccess, user, message, navigate, dispatch, reset]);
+
+  const updateUserProfileUtil = (data) => {
+    data.id = user.id;
+    dispatch(updateUserProfile(data)).then(() => {
+      reset();
+      navigate("/documents");
+    });
+  }
 
   return (
     <div className="bg-white container mx-auto my-3">
@@ -56,7 +64,7 @@ const Register = () => {
                 {user ? `Welcome, ${user.email}` : ""}, Here you can change you profile details
             </p>
             <form
-              onSubmit={handleSubmit((data) => dispatch(registerFunc(data)))}
+              onSubmit={handleSubmit((data) => updateUserProfileUtil(data))}
               className="mx-auto my-3"
             >
               <div className="grid md:grid-cols-2 gap-4">
@@ -139,7 +147,7 @@ const Register = () => {
               <input
                 className="mt-2 shadow cursor-pointer bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 type="submit"
-                value="Sign Up"
+                value="Update Profile"
               />
             </form>
           </div>
@@ -149,4 +157,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Profile;

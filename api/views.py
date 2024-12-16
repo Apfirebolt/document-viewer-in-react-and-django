@@ -55,6 +55,18 @@ class RetrieveUpdateDestroyCustomUserApiView(RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         try:
             user = CustomUser.objects.get(id=kwargs["pk"])
+            # check if the user is updating his own profile
+            if user.id != request.user.id:
+                return Response(
+                    {"error": "You are not allowed to update this user"},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            # check if username already exists in the database
+            if CustomUser.objects.filter(username=request.data["username"]).exists():
+                return Response(
+                    {"error": "Username already exists"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             serializer = UpdateUserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
