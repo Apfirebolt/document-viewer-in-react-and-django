@@ -16,7 +16,7 @@ const Header = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="bg-white">
+    <div className="bg-neutral-100 text-white border-t border-gray-200">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -70,6 +70,15 @@ const Header = () => {
 
                   <div className="flow-root">
                     <Link
+                      to="/documents"
+                      className="-m-2 p-2 block font-medium text-gray-900"
+                    >
+                      Documents
+                    </Link>
+                  </div>
+
+                  <div className="flow-root">
+                    <Link
                       to="/admin"
                       className="-m-2 p-2 block font-medium text-gray-900"
                     >
@@ -106,7 +115,7 @@ const Header = () => {
         {/* Top navigation */}
         <nav
           aria-label="Top"
-          className="relative z-20 bg-white bg-opacity-90 backdrop-filter backdrop-blur-xl"
+          className="relative z-20 backdrop-filter backdrop-blur-xl"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="h-16 flex items-center">
@@ -129,6 +138,13 @@ const Header = () => {
                     >
                       Sign Out
                     </button>
+
+                    <Link
+                      to="/documents"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
+                      Documents
+                    </Link>
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
 
                     {user.is_admin ? (

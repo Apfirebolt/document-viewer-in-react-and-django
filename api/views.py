@@ -30,6 +30,9 @@ class ListCreateDocumentApiView(ListCreateAPIView):
     queryset = Document.objects.all()
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Document.objects.filter(user=self.request.user)
+        
 
 class RetrieveUpdateDestroyDocumentApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = ListCreateDocumentSerializer
