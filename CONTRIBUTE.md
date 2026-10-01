@@ -1,44 +1,32 @@
-# Contributing to Document Viewer
+# Contributing
 
-Thank you for considering contributing to our project! Here are some guidelines to help you get started.
+Contributions to Document Viewer are welcome. For local setup, follow the [project README](README.md); it covers the Django/PostgreSQL backend and the React client.
 
-## How to Contribute
+## Workflow
 
-1. **Fork the repository**: Click the "Fork" button at the top right of the repository page.
-2. **Clone your fork**: 
-    ```bash
-    git clone https://github.com/your-username/document_viewer.git
-    ```
-3. **Create a branch**: 
-    ```bash
-    git checkout -b feature-name
-    ```
-4. **Make your changes**: Implement your feature or fix the bug.
-5. **Commit your changes**: 
-    ```bash
-    git commit -m "Description of your changes"
-    ```
-6. **Push to your fork**: 
-    ```bash
-    git push origin feature-name
-    ```
-7. **Create a pull request**: Go to the original repository and click "New Pull Request".
+1. Fork the repository and clone your fork.
+2. Create a branch for the change: `git checkout -b describe-your-change`.
+3. Make a focused change and add or update tests where behavior changes.
+4. Run the relevant checks before opening a pull request.
+5. Push the branch to your fork and open a pull request describing the change, its motivation, and how you tested it.
 
-## Code Style
+## Project checks
 
-- Follow the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide for Python code.
-- Ensure your code passes all tests and linter checks.
+Run backend tests from the repository root, with PostgreSQL configured and available:
 
-## Reporting Issues
+```bash
+python manage.py test
+```
 
-If you find a bug or have a feature request, please create an issue on the [issue tracker](https://github.com/Apfirebolt/document-viewer-in-react-and-django).
+Run the frontend lint and production build from `client/`:
 
-## Code of Conduct
+```bash
+npm run lint
+npm run build
+```
 
-Please adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) in all your interactions with the project.
+Follow PEP 8 for Python changes and the existing JavaScript/React patterns in the client. Keep changes scoped, and include migrations when model changes require them.
 
-## License
+## Issues and licensing
 
-By contributing, you agree that your contributions will be licensed under the same license as the project.
-
-Thank you for your contributions!
+Report bugs or request features in the [GitHub issue tracker](https://github.com/Apfirebolt/document-viewer-in-react-and-django/issues). Contributions are subject to the project's [LICENSE.md](LICENSE.md).
